@@ -66,7 +66,7 @@ def find_mod_inverse(A: int, B: int,
     if not t:
         if not verbose:
             return (None, None)
-        (None, (f"The multiplicative inverse for {A} mod {B} does not exist."))
+        return (None, (f"The multiplicative inverse for {A} mod {B} does not exist."))
     else:
         quotients, first_vars, second_vars, remainders, counter, works = t
         n = counter

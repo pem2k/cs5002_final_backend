@@ -15,7 +15,10 @@ def calculate_and_view():
         return jsonify({"error": "Missing 'number' or 'mod'"}), 400
 
     inverse, works = work.find_mod_inverse(number, mod, True, False)
-
+    print({
+        "inverse": inverse,
+        "works": works
+    })
     return jsonify({
         "inverse": inverse,
         "works": works
