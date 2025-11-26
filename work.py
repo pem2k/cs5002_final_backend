@@ -66,9 +66,9 @@ def find_mod_inverse(A: int, B: int,
     if not t:
         if not verbose:
             return (None, None)
-        return (None, (f"The multiplicative inverse for {A} mod {B} does not exist."))
+        (None, (f"The multiplicative inverse for {A} mod {B} does not exist."))
     else:
-        quotients, first_vars, second_vars, counter, works = t
+        quotients, first_vars, second_vars, remainders, counter, works = t
         n = counter
 
     # Reverse
@@ -89,10 +89,10 @@ def find_mod_inverse(A: int, B: int,
     counter += 1
     v1 = first_vars.pop()
     v2 = second_vars.pop()
-
+    r = remainders.pop()
     if verbose:
         # printing
-        works.append(f'Isolating {v2} from ({n})')
+        works.append(f'Isolating {r} from ({n})')
         n -= 1
         equation_str = f'1 = {v1} * {c1} + {v2} * {c2}'
         counter_str = f'... ({counter})'
@@ -106,8 +106,9 @@ def find_mod_inverse(A: int, B: int,
         counter += 1
         v1 = first_vars.pop()
         v2 = second_vars.pop()
+        r = remainders.pop()
         if verbose:
-            works.append(f'Isolating {v2} from ({n}) and putting in \
+            works.append(f'Isolating {r} from ({n}) and putting in \
 ({counter - 1}).')
             works.append(f'Rearrange to keep as a linear combination of \
 {v1} and {v2}:')
@@ -161,7 +162,7 @@ def euclidean(A: int, B: int, verbose: bool = False) -> tuple:
     '''
     This function takes two integers A and B, and a bool verbose.
     If GCD(A, B) is 1,
-        it returns a 5-tuple of three lists of ints, an integer, and
+        it returns a 6-tuple of four lists of ints, an integer, and
         a list of strings.
     Else,
         returns None
@@ -170,6 +171,7 @@ def euclidean(A: int, B: int, verbose: bool = False) -> tuple:
     first_vars = list()
     second_vars = list()
     quotients = list()
+    remainders = list()
     works = list()
     # initiate variables
     greater = B
@@ -181,6 +183,7 @@ def euclidean(A: int, B: int, verbose: bool = False) -> tuple:
     first_vars.append(greater)
     second_vars.append(smaller)
     quotients.append(q)
+    remainders.append(mod)
     if verbose:
         works.append('-'*80)
         works.append('First Part: Euclidean Algorithm')
@@ -200,6 +203,7 @@ def euclidean(A: int, B: int, verbose: bool = False) -> tuple:
         first_vars.append(greater)
         second_vars.append(smaller)
         quotients.append(q)
+        remainders.append(mod)
         counter += 1
         if verbose:
             # print
@@ -207,14 +211,16 @@ def euclidean(A: int, B: int, verbose: bool = False) -> tuple:
             counter_str = f'... ({counter})'
             works.append(f'{equation_str:<70}{counter_str:>10}')
         if mod == 1:    # early stop if we know GCD(A, B) is 1
-            return quotients, first_vars, second_vars, counter, works
+            return quotients, first_vars, second_vars, remainders, counter, works
     return None
 
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
+    x, m = find_mod_inverse(197, 2001, True, False)
+    for line in m:
+        print(line)
     # x, works = find_mod_inverse(197, 2001, True, True)
     # with open('works.json', 'w') as f:
     #    f.write(works)
-    
