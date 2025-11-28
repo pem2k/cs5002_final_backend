@@ -4,7 +4,7 @@ import work
 
 app = Flask(__name__)
 # coming back to config once domains are decided on
-CORS(app, resources={r"/*": {"origins": ["https://inverting-modulo.netlify.app"]}})
+CORS(app, resources={r"/*": {"origins": ["https://inverting-modulo.netlify.app", "http://localhost:3000"]}})
 
 @app.route("/", methods=["POST"])
 def calculate_and_view():
@@ -19,6 +19,7 @@ def calculate_and_view():
         "inverse": inverse,
         "works": works
     })
+
     return jsonify({
         "inverse": inverse,
         "works": works

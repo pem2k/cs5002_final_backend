@@ -50,15 +50,15 @@ def find_mod_inverse(A: int, B: int,
     Examples:
     >>> find_mod_inverse(5, 9, verbose=False, need_json=False)
     (2, None)
-    >>> find_mod_inverse(50, 90, False)
+    >>> find_mod_inverse(50, 90)
     (None, None)
-    >>> find_mod_inverse(197, 2001, False)
+    >>> find_mod_inverse(197, 2001)
     (1097, None)
-    >>> find_mod_inverse(1970, 20010, False)
+    >>> find_mod_inverse(1970, 20010)
     (None, None)
-    >>> find_mod_inverse(999979, 999983, False)
+    >>> find_mod_inverse(999979, 999983)
     (749987, None)
-    >>> find_mod_inverse(961748941, 982451653, False)
+    >>> find_mod_inverse(961748941, 982451653)
     (973852246, None)
     '''
 
@@ -172,6 +172,7 @@ def euclidean(A: int, B: int, verbose: bool = False) -> tuple:
     second_vars = list()
     quotients = list()
     remainders = list()
+    pre = list()
     works = list()
     # initiate variables
     greater = B
@@ -184,13 +185,30 @@ def euclidean(A: int, B: int, verbose: bool = False) -> tuple:
     second_vars.append(smaller)
     quotients.append(q)
     remainders.append(mod)
+    lhs_len = len(str(max(A, B)))
     if verbose:
-        works.append('-'*80)
-        works.append('First Part: Euclidean Algorithm')
-        works.append('-'*80)
+        pre.append('-'*80)
+        pre.append('First Part: Euclidean Algorithm')
+        pre.append('-'*80)
+        pre.append('')        
+        iter_counter = f'Iter {counter}:'
+        max_len = max(len(str(greater)),
+                      len(str(smaller*quotients[-1])),
+                      len(str(mod)))
+        pre.append(f'{iter_counter:<12}')
+        pre.append(f'{12 * " "} {quotients[-1]:<}')
+        rule = '-' * (max_len + 1)
+        pre.append(f'{12 * " "}{rule}')
+        pre.append(f'{smaller:>10} | {greater:>{max_len}}')
+        pre.append(f'{12 * " "}-{smaller*quotients[-1]:>{max_len}}')
+        pre.append(f'{12 * " "}{rule}')
+        pre.append(f'{12 * " "} {mod:>{max_len}}')
+        pre.append('')
+        works.append(f'Thus, GCD({A}, {B}) = 1')
+        works.append('')
         works.append('Euclidean algorithm gives us the following equations.')
         works.append('')
-        equation_str = f'{greater} = {smaller} * {quotients[-1]} + {mod}'
+        equation_str = f'{greater:>{lhs_len}} = {smaller} * {quotients[-1]} + {mod}'
         counter_str = f'... ({counter})'
         works.append(f'{equation_str:<70}{counter_str:>10}')
     while mod > 0:
@@ -206,11 +224,25 @@ def euclidean(A: int, B: int, verbose: bool = False) -> tuple:
         remainders.append(mod)
         counter += 1
         if verbose:
-            # print
-            equation_str = f'{greater} = {smaller} * {quotients[-1]} + {mod}'
+            equation_str = f'{greater:>{lhs_len}} = {smaller} * {quotients[-1]} + {mod}'
             counter_str = f'... ({counter})'
+            iter_counter = f'Iter {counter}:'
+            max_len = max(len(str(greater)),
+                      len(str(smaller*quotients[-1])),
+                      len(str(mod)))
+            pre.append(f'{iter_counter:<12}')
+            pre.append(f'{12 * " "} {quotients[-1]:<}')
+            rule = '-' * (max_len + 1)
+            pre.append(f'{12 * " "}{rule}')
+            pre.append(f'{smaller:>10} | {greater:>{max_len}}')
+            pre.append(f'{12 * " "}-{smaller*quotients[-1]:>{max_len}}')
+            pre.append(f'{12 * " "}{rule}')
+            pre.append(f'{12 * " "} {mod:>{max_len}}')
+            pre.append('')
             works.append(f'{equation_str:<70}{counter_str:>10}')
         if mod == 1:    # early stop if we know GCD(A, B) is 1
+            pre.extend(works)
+            works = pre.copy()
             return quotients, first_vars, second_vars, remainders, counter, works
     return None
 
@@ -218,9 +250,7 @@ def euclidean(A: int, B: int, verbose: bool = False) -> tuple:
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
-    x, m = find_mod_inverse(197, 2001, True, False)
+    x, m = find_mod_inverse(197, 2001, True)
+    x, m = find_mod_inverse(961748941, 982451653, True)
     for line in m:
         print(line)
-    # x, works = find_mod_inverse(197, 2001, True, True)
-    # with open('works.json', 'w') as f:
-    #    f.write(works)
